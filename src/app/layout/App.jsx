@@ -1,11 +1,18 @@
+import React from "react";
+import "semantic-ui-css/semantic.min.css";
+import { Container } from "semantic-ui-react";
 
-import "./style.css"
+import EventDashBoard from "../../features/events/eventDashBoard/EventDashBoard";
+import NavBar from "../../features/nav/NavBar";
 
 function App() {
   return (
-    <div className="App">
-      <h2>Event - App</h2>
-    </div>
+    <>
+      <NavBar />
+      <Container className='main'>
+        <EventDashBoard />
+      </Container>
+    </>
   );
 }
 
