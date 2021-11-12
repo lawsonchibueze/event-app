@@ -1,9 +1,8 @@
-import React from "react";
-import { Button, Icon, Item, List, Segment } from "semantic-ui-react";
-import EventListAttendee from "./EventListAttendee";
+import React from 'react';
+import { Segment, Item, Icon, List, Button } from 'semantic-ui-react';
+import EventListAttendee from './EventListAttendee';
 
-export default function EventListItems({ event, selectedEvent }) {
-  console.log(event);
+export default function EventListItem({ event, selectEvent, deleteEvent }) {
   return (
     <Segment.Group>
       <Segment>
@@ -12,7 +11,7 @@ export default function EventListItems({ event, selectedEvent }) {
             <Item.Image size='tiny' circular src={event.hostPhotoURL} />
             <Item.Content>
               <Item.Header content={event.title} />
-              <Item.Description>{event.hostedBy}</Item.Description>
+              <Item.Description>Hosted by {event.hostedBy}</Item.Description>
             </Item.Content>
           </Item>
         </Item.Group>
@@ -26,14 +25,20 @@ export default function EventListItems({ event, selectedEvent }) {
       <Segment secondary>
         <List horizontal>
           {event.attendees.map((attendee) => (
-            <EventListAttendee attendee={attendee} key={attendee.id} />
+            <EventListAttendee key={attendee.id} attendee={attendee} />
           ))}
         </List>
       </Segment>
       <Segment clearing>
         <div>{event.description}</div>
         <Button
-          onClick={() => selectedEvent(event)}
+          onClick={() => deleteEvent(event.id)}
+          color='red'
+          floated='right'
+          content='Delete'
+        />
+        <Button
+          onClick={() => selectEvent(event)}
           color='teal'
           floated='right'
           content='View'

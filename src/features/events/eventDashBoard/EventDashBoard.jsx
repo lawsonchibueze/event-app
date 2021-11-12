@@ -1,30 +1,43 @@
-import { Button, Grid, GridColumn } from "semantic-ui-react";
-import EventForm from "../eventForm/EventForm";
-import EventsList from "./EventsList";
-import { sampleData } from "../../../app/api/SampleData";
-import { useState } from "react";
+import React, { useState } from 'react';
+import { Grid } from 'semantic-ui-react';
+import EventList from './EventList';
+import EventForm from '../eventForm/EventForm';
+import { sampleData } from '../../../app/api/sampleData';
 
-export default function EventDashBoard() {
-  const [events, setEvent] = useState(sampleData);
-  const [formOpen, setFormOpen] = useState(false);
-  const handleform = () => {
-    return setFormOpen(true);
-  };
+export default function EventDashboard({ formOpen, setFormOpen, selectEvent, selectedEvent }) {
+  const [events, setEvents] = useState(sampleData);
+  
 
-  const closeFormHandle = () =>{
-    return setFormOpen(false)
+  function handleCreateEvent(event) {
+    setEvents([...events, event]);
   }
+
+  function handleUpdateEvent(updatedEvent) {
+      setEvents(events.map(evt => evt.id === updatedEvent.id ? updatedEvent : evt));
+      selectEvent(null);
+  }
+
+  function handleDeleteEvent(eventId) {
+      setEvents(events.filter(evt => evt.id !== eventId));
+  }
+
   return (
     <Grid>
-      <GridColumn width={10}>
-        <EventsList events={events} />
-      </GridColumn>
-      <GridColumn width={6}>
-        {/* <button onClick={handleform}>Create An Event</button> */}
-        <Button positive inverted content = "Create Event" onClick = {handleform}/>
-        {/* <Button positive inverted content='Create Event' /> */}
-        {formOpen && <EventForm setFormOpen = {setFormOpen} closeFormHandle = {closeFormHandle}/>}
-      </GridColumn>
+      <Grid.Column width={10}>
+        <EventList events={events} selectEvent={selectEvent} deleteEvent={handleDeleteEvent} />
+      </Grid.Column>
+      <Grid.Column width={6}>
+        {formOpen && (
+          <EventForm
+            setFormOpen={setFormOpen}
+            setEvents={setEvents}
+            createEvent={handleCreateEvent}
+            selectedEvent={selectedEvent}
+            updateEvent={handleUpdateEvent}
+            key={selectedEvent ? selectedEvent.id : null}
+          />
+        )}
+      </Grid.Column>
     </Grid>
   );
 }
